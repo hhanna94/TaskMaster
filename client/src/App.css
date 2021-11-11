@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Grandstander:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.App {
+  background-color: #457B9D;
+  width: 100%;
+  height: 100vh;
+}
+
+
+/* Font Styling */
+* {
+  font-family: 'Rubik', sans-serif;
+}
+h1 {
+  font-family: 'Grandstander', cursive;
+  font-weight: bold;
+}
+
+h3 {
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Button Styling */
+button, .button {
+  border: none;
+  border-radius: 4px;
+  margin: 5px 0;
+  padding: 2px 10px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.blue-button {
+  background-color: #1D3557;
+}
+
+.blue-button:hover {
+  background-color: #14253D;
+  box-shadow: 2px 2px 5px #151C0D;
+}
+
+.red-button {
+  background-color: #7F1019;
+}
+
+.red-button:hover {
+  background-color: #5B0B12;
+  box-shadow: 2px 2px 5px #151C0D;
+}
+
+.card {
+  background-color: #F1FAEE;
+  min-height: 89vh;
+}
+
+.nav-link {
+  color: white;
+  font-weight: bold;
+}
+
+
+
+/* Table Properties */
+thead {
+  background-color: #386480;
+  font-weight: bold;
+  font-size: 14pt;
+  color: white;
+}
+
+.customTable {
+  background-color: #E2F3F3;
+}
+
+.customTable2 {
+  background-color: #C5E7E7;
+}
