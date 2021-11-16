@@ -78,3 +78,11 @@ thead {
 .customTable2 {
   background-color: #C5E7E7;
 }
+
+
+/* Form Properties */
+.formDiv {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1em;
+}

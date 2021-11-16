@@ -7,7 +7,11 @@ const TaskForm = () => {
             <form className="mt-4 container w-25">
                 <div className="d-flex justify-content-center mb-3">
                     <label for="taskName" className="col-sm-4 col-form-label">Task Name: </label>
-                    <input type="password" className="form-control col-sm-8" id="taskName" name="taskName" />
+                    <input type="text" className="form-control col-sm-8" id="taskName" name="taskName" />
+                </div>
+                <div className="d-flex justify-content-center mb-3 align-items-center">
+                    <label for="description" className="col-sm-4 col-form-label">Description: </label>
+                    <textarea name="description" id="description" className="form-control col-sm-8"></textarea>
                 </div>
                 <div className="d-flex justify-content-center mb-3">
                     <label for="dueDate" className="col-sm-4 col-form-label">Due Date: </label>

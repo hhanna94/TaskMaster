@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 
@@ -51,6 +52,7 @@ const MyTasks = () => {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [tasksPerPage, setTasksPerPage] = useState(10)
+    
 
 
     const tasksPerPageOptions = [10, 25, 50]
@@ -93,7 +95,7 @@ const MyTasks = () => {
         listing_table.innerHTML = "";
 
         for (var i = (page - 1) * tasksPerPage; i < (page * tasksPerPage) && i < data.length; i++) {
-            listing_table.innerHTML += `<tr class=${i%2 == 0 ? "customTable" : "customTable2"}>
+            listing_table.innerHTML += `<tr class=${i%2 === 0 ? "customTable" : "customTable2"}>
             <td>${data[i].taskName}</td>
             <td>${data[i].dueDate}</td>
             <td>${data[i].priority}</td>
@@ -105,8 +107,8 @@ const MyTasks = () => {
         }
         page_span.innerHTML = page;
 
-        page == 1 ? _prev.style.visibility = "hidden" : _prev.style.visibility = "visible"
-        page == numPages() ? _next.style.visibility = "hidden" : _next.style.visibility = "visible"
+        page === 1 ? _prev.style.visibility = "hidden" : _prev.style.visibility = "visible"
+        page === numPages() ? _next.style.visibility = "hidden" : _next.style.visibility = "visible"
         setCurrentPage(page);
 
     }
@@ -133,14 +135,14 @@ const MyTasks = () => {
                 <div className="d-flex gap-3 align-items-center">
                     <button onClick={prevPage} id="_prev" className=" red-button">Previous</button>
                     <label>Current Page: <span id="page"></span></label>
-                    <button id="_next" onClick={nextPage} class="page-link" className=" blue-button">Next</button>
+                    <button id="_next" onClick={nextPage} className=" blue-button">Next</button>
                 </div>
                 <div>
                     <label className="me-3">Rows per Page: </label>
                     <select onChange={ e => {setTasksPerPage(parseInt(e.target.value))}} name="taskPerPageSelect" id="taskPerPageSelect" className="py-0">
                         {tasksPerPageOptions.map((num, i) => {
                             return (
-                                <option value={parseInt(num)}>{num}</option>
+                                <option key={i} value={num}>{num}</option>
                             )
                         })}
                     </select>
