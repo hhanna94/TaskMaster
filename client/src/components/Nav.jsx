@@ -21,17 +21,14 @@ const Nav = props => {
             <h1 className="align-self-end">TaskMaster</h1>
             <ul className="nav">
                 <li className="nav-item">
-                    <Link className="nav-link" to="/home">My Open Tasks</Link>
-                </li>
-                <li className="nav-item">
-                    <Link className="nav-link" to="/tasks">All Tasks</Link>
+                    <Link className="nav-link" to="/home">All Tasks</Link>
                 </li>
                 <li className="nav-item">
                     <Link className="nav-link" to="/tasks/new">Create Task</Link>
                 </li>
-                <li className="nav-item">
+                {loggedInUser.admin?<li className="nav-item">
                     <Link className="nav-link" to="/admin">Admin</Link>
-                </li>
+                </li> : ""}
                 {loggedInUser._id? <button onClick={logout} className="ms-4 red-button align-self-center">Logout</button>:<Link to="/" className="ms-4 button blue-button align-self-center">Login</Link>}
                 
             </ul>

@@ -1,14 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import axios from 'axios'
+import React, {useState} from 'react';
 
-const Admin = () => {
+const UserForm = props => {
     const departments = ["Accounting", "Marketing", "Operations", "Sales"]
-    const defaultUserInfo = {firstName: "", lastName: "", department: "", email: "", password: "", confirmPassword: "", admin: false}
+
+    const {onSubmitProp, errors, defaultUserInfo} = props
     const [userFormInfo, setUserFormInfo] = useState(defaultUserInfo)
-    const [toggleReload, setToggleReload] = useState(false)
-    const [errors, setErrors] = useState({})
-    const [users, setUsers] = useState([])
-    const [loaded, setLoaded] = useState(false)
 
     const updateUserForm = (e) => {
         let value
@@ -23,72 +19,10 @@ const Admin = () => {
         })
     }
 
-    const createUser = (e) => {
-        e.preventDefault();
-        axios.post('http://localhost:8000/api/users', userFormInfo)
-            .then(res => {
-                console.log(res)
-                if (res.data.userExists) {
-                    setErrors(res.data)
-                } else {
-                    setErrors({})
-                    setUserFormInfo(defaultUserInfo)
-                    setToggleReload(!toggleReload)
-                }
-            })
-            .catch(err => {
-                setErrors(err.response.data.errors)
-            })
-    }
-
-    const deleteUser = id => {
-        axios.delete(`http://localhost:8000/api/users/${id}`)
-            .then(res => {
-                console.log(res)
-                setToggleReload(!toggleReload)
-            })
-            .catch(err => console.log(err))
-    }
-
-    useEffect(() => {
-        axios.get('http://localhost:8000/api/users')
-            .then(res => {
-                setUsers(res.data)
-                setLoaded(true)
-            })
-            .catch(err => console.log(err))
-    }, [toggleReload])
 
     return (
-        <div className="container">
-            <h3 className="mb-2">Admin</h3>
-            <div className="d-flex justify-content-around">
-                <div>
-                    <h4 className="text-center">Users</h4>
-                    <table style={{minWidth:"30vw"}} className="mt-4 table table-striped table-bordered border-dark text-center align-middle">
-                        <thead>
-                            <tr>
-                                <td>Name</td>
-                                <td>Department</td>
-                                <td>Actions</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {loaded && users.map( (user, i) => {
-                                return (
-                                <tr key={i}>
-                                    <td>{user.firstName} {user.lastName}</td>
-                                    <td>{user.department}</td>
-                                    <td><button className="button red-button" onClick={ () => {deleteUser(user._id)}}>Delete</button></td>
-                                </tr>
-                                )
-                            })}
-                        </tbody>
-                    </table>
-                </div>
-                <div style={{width: "22vw"}}>
-                    <h4 className="text-center">Create a User</h4>
-                    <form onSubmit={createUser} className="mt-4">
+        <div>
+            <form onSubmit={e => {onSubmitProp(userFormInfo)}} className="mt-4">
                         <div className="formDiv">
                             <label htmlFor="firstName" className="col-5 col-form-label">First Name: </label>
                             <input onChange={updateUserForm} type="text" className="form-control" id="firstName" name="firstName"  value={userFormInfo.firstName}/>
@@ -134,11 +68,8 @@ const Admin = () => {
                             <input className="button blue-button" type="submit" value="Create User" />
                         </div>
                     </form>
-                </div>
-            </div>
         </div>
     );
 };
 
-
-export default Admin;
+export default UserForm;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 
@@ -19,7 +19,6 @@ const Login = props => {
         e.preventDefault();
         axios.post("http://localhost:8000/api/login", loginInfo, { withCredentials: true })
             .then(res => {
-                // console.log(res)
                 if (res.data.msg === "success!") {
                     setToggleUpdate(!toggleUpdate)
                     history.push("/home")
@@ -29,12 +28,6 @@ const Login = props => {
             })
             .catch(err => console.log(err))
     }
-
-    // useEffect(() => {
-    //     axios.get('http://localhost:8000/api/users/loggedInUser', { withCredentials: true })
-    //         .then(res => console.log(res.data))
-    //         .catch(err => console.log(err))
-    // }, [])
 
     return (
         <div className="container w-50">

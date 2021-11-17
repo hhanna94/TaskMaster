@@ -70,10 +70,6 @@ module.exports.getLoggedInUser = (req, res) => {
 }
 
 module.exports.logout = (req, res) => {
-    // res.clearCookie('usertoken');
-    // res.sendStatus(200);
-    res.cookie("usertoken", jwt.sign({_id:""}, secret), {
-        httpOnly: true,
-        maxAge: 0
-    }).json({msg:"ok"})
+    res.clearCookie('usertoken');
+    res.sendStatus(200);
 }
