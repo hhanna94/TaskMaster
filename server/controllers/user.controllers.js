@@ -40,6 +40,12 @@ module.exports.getOneUser = (req, res) => {
         .catch(err => console.log(err))
 }
 
+module.exports.updateUser = (req, res) => {
+    User.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true })
+        .then(updatedUser => res.json(updatedUser))
+        .catch(err => res.status(400).json(err))
+}
+
 module.exports.login = (req, res) => {
     let invalidAttempt = {invalidAttempt: "Invalid username/password."}
     User.findOne({email: req.body.email})

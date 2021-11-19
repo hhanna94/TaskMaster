@@ -12,15 +12,14 @@ const TaskForm = props => {
 
     const handleSubmit = e => {
         e.preventDefault()
-        let timeNow = new Date().toLocaleTimeString()
-        if (parent === "edit") {
-            let userName = `${loggedInUser.firstName} ${loggedInUser.lastName}`
-            taskInfo.history.push({
-                description: taskInfo.description, 
-                time: taskInfo.updatedAt, 
-                editor: userName})
-        }
-        console.log(taskInfo)
+        let history = taskInfo.history
+        let now = new Date()
+        let userName = `${loggedInUser.firstName} ${loggedInUser.lastName}`
+        history.push({
+            description: taskInfo.description,
+            time: now,
+            editor: userName
+        })
         onSubmitProp(taskInfo)
         setSuccess(true)
     }
@@ -34,7 +33,7 @@ const TaskForm = props => {
                 </div>
                 {errors.taskName ? <p className="text-danger">*{errors.taskName.message}</p> : ""}
                 <div className="d-flex justify-content-center mb-3 align-items-center">
-                    <label htmlFor="description" className="col-sm-4 col-form-label">Description: </label>
+                    <label htmlFor="description" className="col-sm-4 col-form-label">Comment: </label>
                     <textarea onChange={updateForm} name="description" id="description" className="form-control" value={taskInfo.description}></textarea>
                 </div>
                 {errors.description ? <p className="text-danger">*{errors.description.message}</p> : ""}
@@ -69,16 +68,16 @@ const TaskForm = props => {
                 {errors.assignTo ? <p className="text-danger">*Must choose a user to assign the task to.</p> : ""}
                 {parent === "edit" ?
 
-                        <div className="d-flex justify-content-center mb-3">
-                            <label htmlFor="status" className="col-sm-4 col-form-label">Status: </label>
-                            <select onChange={updateForm} name="status" id="status" className="form-select" value={taskInfo.status}>
-                                {status.map((status, i) => {
-                                    return (
-                                        <option key={i} value={status}>{status}</option>
-                                    )
-                                })}
-                            </select>
-                        </div>
+                    <div className="d-flex justify-content-center mb-3">
+                        <label htmlFor="status" className="col-sm-4 col-form-label">Status: </label>
+                        <select onChange={updateForm} name="status" id="status" className="form-select" value={taskInfo.status}>
+                            {status.map((status, i) => {
+                                return (
+                                    <option key={i} value={status}>{status}</option>
+                                )
+                            })}
+                        </select>
+                    </div>
 
                     : ""}
                 {success ? <p className="text-success text-center">**Task saved successfully.**</p> : ""}

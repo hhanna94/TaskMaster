@@ -1,13 +1,13 @@
 import axios from 'axios';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import TaskForm from '../components/TaskForm';
 
 const CreateTask = props => {
-    let today = new Date().toLocaleDateString('en-CA', {timeZone: 'EST'});
-    const {loggedInUser, users, status, priorities} = props
+    let today = new Date().toLocaleDateString('en-CA', { timeZone: 'EST' });
+    const { loggedInUser, users, status, priorities } = props
     const [errors, setErrors] = useState({})
-    const defaultTask = {taskName: "", description: "", dueDate: today, priority: "", assignTo: "", createdBy: loggedInUser._id, status: "In Progress"}
+    const defaultTask = { taskName: "", description: "", dueDate: today, priority: "", assignTo: "", createdBy: loggedInUser._id, status: "In Progress", history: [] }
     const history = useHistory();
     const parent = "create"
 
@@ -15,16 +15,18 @@ const CreateTask = props => {
 
     const createTask = task => {
         axios.post('http://localhost:8000/api/tasks', task)
-            .then(res => history.goBack())
+            .then(res => {
+                history.goBack()
+            })
             .catch(err => setErrors(err.response.data.errors))
     }
 
-    return (
-        <div>
-            <h3>Create a New Task</h3>
-            <TaskForm loggedInUser={loggedInUser} priorities={priorities} status={status} users={users} onSubmitProp={createTask} errors={errors} defaultTask={defaultTask} parent={parent} />
-        </div>
-    );
+return (
+    <div>
+        <h3>Create a New Task</h3>
+        <TaskForm loggedInUser={loggedInUser} priorities={priorities} status={status} users={users} onSubmitProp={createTask} errors={errors} defaultTask={defaultTask} parent={parent} />
+    </div>
+);
 };
 
 

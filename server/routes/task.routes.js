@@ -6,6 +6,4 @@ module.exports = function (app) {
     app.get('/api/tasks/:id', TaskController.getOneTask)
     app.put('/api/tasks/:id', TaskController.updateTask)
     app.get('/api/tasks/:priority/:dueDate/:status/:assignTo', TaskController.getFilteredTasks)
-    app.delete('/api/tasks/:id', TaskController.deleteTask)
-    app.get('/api/tasks', TaskController.getAllTasks)
 }                                   

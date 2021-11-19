@@ -9,4 +9,5 @@ module.exports = function (app) {
     app.get('/api/users', UserController.getAllUsers)
     app.post('/api/users', UserController.createUser)
     app.post('/api/login', UserController.login)
+    app.put('/api/users/:id', UserController.updateUser)
 }

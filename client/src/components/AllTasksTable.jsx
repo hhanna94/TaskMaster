@@ -11,7 +11,7 @@ const AllTasksTable = props => {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [tasksPerPage, setTasksPerPage] = useState(5)
-    const [sortCriteria, setSortCriteria] = useState({column: "status", direction: false})
+    const [sortCriteria, setSortCriteria] = useState({column: "priority", direction: true})
 
     const tasksPerPageOptions = [5, 10, 25, 50]
 
@@ -21,25 +21,13 @@ const AllTasksTable = props => {
         let priorityImg = document.getElementById("priorityImg")
         let statusImg = document.getElementById("statusImg")
 
-        if (column === "status") {
-            priorityImg.src = UpDown
-            if (!direction) {
-                statusImg.src = ZA
-                return [...filteredTasks].sort( (a,b) => a.status < b.status ? 1 : -1)
-            } else if (direction) {
-                statusImg.src = AZ
-                return [...filteredTasks].sort( (a,b) => a.status > b.status ? 1 : -1)
-            }
+        column === "status" ? priorityImg.src = UpDown : statusImg.src = UpDown
+        if (!direction) {
+            column === "status" ? statusImg.src = ZA : priorityImg.src = ZA
+            return [...filteredTasks].sort( (a,b) => a[column] < b[column] ? 1 : -1)
         } else {
-            statusImg.src = UpDown
-            if (!direction) {
-                priorityImg.src = ZA
-                return [...filteredTasks].sort( (a,b) => a.priority < b.priority ? 1 : -1)
-            } else if (direction) {
-                priorityImg.src = AZ
-            
-            return [...filteredTasks].sort( (a,b) => a.priority > b.priority ? 1 : -1)
-            }
+            column === "status" ? statusImg.src = AZ : priorityImg.src = AZ
+            return [...filteredTasks].sort( (a,b) => a[column] > b[column] ? 1 : -1)
         }
     }
 
@@ -108,8 +96,8 @@ const AllTasksTable = props => {
                     <tr>
                         <th className="col-3" >Task Name </th>
                         <th className="col-1">Due Date</th>
-                        <th className="col-2">Priority <img id="priorityImg" className="ms-2" onClick={ e => {setSortCriteria({column: "priority", direction: !sortCriteria.direction})}} style={{width: "1em", height: "1em"}} src={ZA} /></th>
-                        <th className="col-2">Status <img id="statusImg" className="ms-2" onClick={ e => {setSortCriteria({column: "status", direction: !sortCriteria.direction})}} style={{width: "1em", height: "1em"}} src={ZA} /></th>
+                        <th className="col-2">Priority <img id="priorityImg" className="ms-2" onClick={ e => {setSortCriteria({column: "priority", direction: !sortCriteria.direction})}} style={{width: "1em", height: "1em"}} src={AZ} /></th>
+                        <th className="col-2">Status <img id="statusImg" className="ms-2" onClick={ e => {setSortCriteria({column: "status", direction: !sortCriteria.direction})}} style={{width: "1em", height: "1em"}} src={UpDown} /></th>
                         <th className="col-2">Assigned To</th>
                         <th className="col-2" colSpan="2">Actions</th>
                     </tr>
@@ -118,12 +106,12 @@ const AllTasksTable = props => {
                     {tableTaskData.map((task, i) => {
                         return (
                             <tr key={i}>
-                                        <td>{task.taskName}</td>
+                                        <td><Link to={`/tasks/${task._id}`}>{task.taskName}</Link></td>
                                         <td>{new Date(task.dueDate).toLocaleDateString("en-US", { timeZone: 'UTC' })}</td>
                                         <td>{task.priority}</td>
                                         <td>{task.status}</td>
                                         <td>{task.assignTo.firstName} {task.assignTo.lastName}</td>
-                                        <td>{<Link className="button blue-button" to={`/tasks/${task._id}`}>View/Edit</Link>}</td>
+                                        <td className="col-1">{<Link className="button blue-button px-4 py-1" to={`/tasks/${task._id}/edit`}>Edit</Link>}</td>
                                         <td>{ task.status !== "Completed" ? <button onClick={e => {completeTask(task)}} className="red-button">Complete</button> : <button className="button btn-secondary" disabled>Complete</button>}</td>
                             </tr>
                         )

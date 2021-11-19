@@ -29,7 +29,7 @@ const TaskData = props => {
                         <p className="">{task.status}</p>
                     </div>
                     <div className="d-flex align-items-center">
-                        <p className="col-3"><strong>Description: </strong></p>
+                        <p className="col-3"><strong>Comment: </strong></p>
                         <p className="col-9">{task.description}</p>
                     </div>
                     <div className="d-flex align-items-center">
@@ -38,14 +38,14 @@ const TaskData = props => {
                     </div>
                 </div>
                 <div className="mt-3 w-50 ps-3">
-                    <h3>Task History</h3>
+                    <h3>Comment History</h3>
                     <div className="mt-4">
                         {task.history.length > 0 ?
                             task.history.map((description, i) => {
                                 return (
                                     <div key={i}>
-                                        <p>{description.description}</p>
-                                        <p className="ps-5">- {description.editor} on {new Date(description.time).toLocaleDateString('en-US')} {new Date(description.time).toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'})}</p>
+                                        <p className="mb-0 fw-bold">{new Date(description.time).toLocaleDateString('en-US')} {new Date(description.time).toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'})}</p>
+                                        <p className="ps-4 mt-0">{description.description} - {description.editor}</p>
                                     </div>
                                 )
                             })

@@ -26,50 +26,53 @@ function App() {
       .catch(err => console.log(err))
   }, [toggleUpdate])
 
+
   useEffect(() => {
     axios.get('http://localhost:8000/api/users')
-      .then(res => setUsers(res.data))
+      .then(res => {
+        setUsers([...res.data].sort((a, b) => a.firstName > b.firstName ? 1 : -1))
+      })
       .catch(err => console.log(err))
-  }, [])
+  }, [loggedInUser])
 
-  return (
-    <div className="App pt-3">
-      <div>
-        <BrowserRouter>
-          <Nav toggleUpdate={toggleUpdate} setToggleUpdate={setToggleUpdate} loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
-          <div className="card mt-3 p-4">
-            <Switch>
+return (
+  <div className="App pt-3">
+    <div>
+      <BrowserRouter>
+        <Nav toggleUpdate={toggleUpdate} setToggleUpdate={setToggleUpdate} loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
+        <div className="card mt-3 p-4">
+          <Switch>
 
-              <Route exact path="/">
-                <Login toggleUpdate={toggleUpdate} setToggleUpdate={setToggleUpdate} />
-              </Route>
+            <Route exact path="/">
+              <Login toggleUpdate={toggleUpdate} setToggleUpdate={setToggleUpdate} />
+            </Route>
 
-              <Route exact path="/home">
-                {loggedInUser._id ? <AllTasks priorities={priorities} status={status} users={users} loggedInUser={loggedInUser}/> : <Link className="text-center" to="/">Please login to continue.</Link>}
-              </Route>
+            <Route exact path="/home">
+              {loggedInUser._id ? <AllTasks priorities={priorities} status={status} users={users} loggedInUser={loggedInUser} /> : <Link className="text-center" to="/">Please login to continue.</Link>}
+            </Route>
 
-              <Route exact path="/tasks/new">
-                {loggedInUser._id ? <CreateTask priorities={priorities} status={status} users={users} loggedInUser={loggedInUser} /> : <Link className="text-center" to="/">Please login to continue.</Link>}
-              </Route>
+            <Route exact path="/tasks/new">
+              {loggedInUser._id ? <CreateTask priorities={priorities} status={status} users={users} loggedInUser={loggedInUser} /> : <Link className="text-center" to="/">Please login to continue.</Link>}
+            </Route>
 
-              <Route exact path="/tasks/:id/edit">
-                {loggedInUser._id ? <EditTask priorities={priorities} status={status} users={users} loggedInUser={loggedInUser} /> : <Link className="text-center" to="/">Please login to continue.</Link>}
-              </Route>
-              
-              <Route exact path="/tasks/:id">
-                {loggedInUser._id ? <ViewTask loggedInUser={loggedInUser} /> : <Link className="text-center" to="/">Please login to continue.</Link>}
-              </Route>
+            <Route exact path="/tasks/:id/edit">
+              {loggedInUser._id ? <EditTask priorities={priorities} status={status} users={users} loggedInUser={loggedInUser} /> : <Link className="text-center" to="/">Please login to continue.</Link>}
+            </Route>
 
-              <Route path="/admin">
-                {loggedInUser.admin ? <Admin departments={departments} /> : <h4 className="text-center">Must be an admin to access this page.</h4>}
-              </Route>
+            <Route exact path="/tasks/:id">
+              {loggedInUser._id ? <ViewTask loggedInUser={loggedInUser} /> : <Link className="text-center" to="/">Please login to continue.</Link>}
+            </Route>
 
-            </Switch>
-          </div>
-        </BrowserRouter>
-      </div>
+            <Route path="/admin">
+              {loggedInUser.admin ? <Admin departments={departments} toggleUpdate={toggleUpdate} setToggleUpdate={setToggleUpdate} /> : <h4 className="text-center">Must be an admin to access this page.</h4>}
+            </Route>
+
+          </Switch>
+        </div>
+      </BrowserRouter>
     </div>
-  );
+  </div>
+);
 }
 
 export default App;

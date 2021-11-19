@@ -27,7 +27,6 @@ module.exports.getOneTask = (req, res) => {
 }
 
 module.exports.updateTask = (req, res) => {
-    // Task.updateOne({_id: req.params.id}, {$push: {history: req.body.description}})
     Task.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true })
         .then(updatedTask => res.json(updatedTask))
         .catch(err => res.status(400).json(err))
@@ -37,7 +36,7 @@ module.exports.getFilteredTasks = (req, res) => {
     // Make an object that is a copy of the filters passed in as parameters in the API call.
     let filters = { ...req.params }
 
-    // If the priority or status filters are set to "All", then we do not want to include that in our Find, so we should delete it from our filters object.
+    // If the priority, status, or  filters are set to "All", then we do not want to include that in our Find, so we should delete it from our filters object.
     if (filters.priority === "All") {
         delete filters.priority
     }
@@ -63,15 +62,3 @@ module.exports.getFilteredTasks = (req, res) => {
         })
         .catch(err => console.log(err))
 }
-
-module.exports.deleteTask = (req, res) => {
-    Task.deleteMany({_id: req.params.id})
-        .then(res => res.json(res))
-        .catch(err => res.json(err))
-}
-
-module.exports.getAllTasks = (req, res) => [
-    Task.find({})
-        .then( tasks => res.json(tasks))
-        .catch( err => res.json(err))
-]

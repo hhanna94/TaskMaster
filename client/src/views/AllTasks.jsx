@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import AllTasksTable from '../components/AllTasksTable';
 
+
+
 const AllTasks = props => {
     const today = new Date().toLocaleDateString('en-CA', {timeZone: 'EST'})
     const { users, status, priorities, loggedInUser } = props
@@ -28,6 +30,7 @@ const AllTasks = props => {
     const handleFilterUpdate = e => {
         setFilter({...filter, [e.target.name]: e.target.value})
     }
+
 
     return (
         <div className="container">
