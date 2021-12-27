@@ -1,5 +1,6 @@
 const TaskController = require('../controllers/task.controllers')
 
+// Actually performs the API call based on the controller logic.
 module.exports = function (app) {
     app.post('/api/tasks', TaskController.createTask)
     app.get('/api/tasks/users/:id', TaskController.viewMyOpenTasks)

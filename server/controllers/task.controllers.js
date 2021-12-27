@@ -1,42 +1,39 @@
 const { Task } = require("../models/task.model")
 
+// Query the database to create a task. If it passes validation, return a JSON of the task, otherwise return a JSON of the validation errors.
 module.exports.createTask = (req, res) => {
     Task.create(req.body)
-        .then(newTask => {
-            console.log(newTask)
-            res.json(newTask)
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(400).json(err)
-        })
+        .then(newTask => res.json(newTask))
+        .catch(err => res.status(400).json(err))
 }
 
+// Query the database to return the user's open tasks (using their ID and and returning any tasks that have a status of In Progress). 
 module.exports.viewMyOpenTasks = (req, res) => {
     Task.find({ assignTo: req.params.id, status: "In Progress" })
-        .then(openTasks => {
-            res.json(openTasks)
-        })
+        .then(openTasks => res.json(openTasks))
         .catch(err => console.log(err))
 }
 
+// Query the database to return a task based on the task ID, containing a user object for the assignTo and createdBy fields.
 module.exports.getOneTask = (req, res) => {
     Task.find({ _id: req.params.id }).populate("assignTo").populate("createdBy")
         .then(task => res.json(task))
         .catch(err => console.log(err))
 }
 
+// Query the database to update a task. If it passes validation, return a JSON of the updated task, otherwise return a JSON of the validation errors.
 module.exports.updateTask = (req, res) => {
     Task.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true })
         .then(updatedTask => res.json(updatedTask))
         .catch(err => res.status(400).json(err))
 }
 
+// Query the database to get a list of tasks that that meet the filter criteria.
 module.exports.getFilteredTasks = (req, res) => {
     // Make an object that is a copy of the filters passed in as parameters in the API call.
     let filters = { ...req.params }
 
-    // If the priority, status, or  filters are set to "All", then we do not want to include that in our Find, so we should delete it from our filters object.
+    // If the priority or status filters are set to "All", then we do not want to include that in our Find, so we should delete it from our filters object.
     if (filters.priority === "All") {
         delete filters.priority
     }
