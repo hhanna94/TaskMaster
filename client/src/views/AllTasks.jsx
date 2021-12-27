@@ -10,6 +10,7 @@ const AllTasks = props => {
     const [filteredTasks, setFilteredTasks] = useState([])
     const [toggleReload, setToggleReload] = useState(false)
     const [loaded, setLoaded] = useState(false)
+    // Sets the default filter state to be as follows.
     const [filter, setFilter] = useState({
         assignTo: loggedInUser._id,
         priority: "All",
@@ -17,7 +18,9 @@ const AllTasks = props => {
         status: "In Progress"
     })
 
+    // Upon loading this view, call on the API to gett a list of filtered tasks based on the given criteria from the filter state. This will get re-run any time there is an update to the filters or if a task has been completed to update the list accordingly.
     useEffect(() => {
+        // The tasks table must be unmounted before remounting it after the API call is successful.
         setLoaded(false)
         axios.get(`http://localhost:8000/api/tasks/${filter.priority}/${filter.dueDate}/${filter.status}/${filter.assignTo}`)
             .then(res => {
@@ -27,6 +30,7 @@ const AllTasks = props => {
             .catch(err => console.log(err))
     }, [filter, toggleReload])
 
+    // Update the filter state anytime someone changes one of the filters.
     const handleFilterUpdate = e => {
         setFilter({...filter, [e.target.name]: e.target.value})
     }

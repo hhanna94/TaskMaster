@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 
 const TaskForm = props => {
     const { onSubmitProp, errors, defaultTask, parent, users, status, priorities, loggedInUser } = props
-    const [success, setSuccess] = useState(false)
     const [taskInfo, setTaskInfo] = useState(defaultTask)
 
+    // When the user types in the form, update the state.
     const updateForm = e => {
         setTaskInfo({ ...taskInfo, [e.target.name]: e.target.value })
-        setSuccess(false)
     }
 
+    // When the user submits the form, before using the parent create/edit logic, add the first instance of task history which contains whatever has been typed in the description, the current time, and whoever made the edit (whoever is logged in). Then, use the parent create/edit logic to create or update the task.
     const handleSubmit = e => {
         e.preventDefault()
         let history = taskInfo.history
@@ -21,7 +21,6 @@ const TaskForm = props => {
             editor: userName
         })
         onSubmitProp(taskInfo)
-        setSuccess(true)
     }
 
     return (
@@ -66,6 +65,7 @@ const TaskForm = props => {
                     </select>
                 </div>
                 {errors.assignTo ? <p className="text-danger">*Must choose a user to assign the task to.</p> : ""}
+                {/* By default, the status of the task will be In Progress. The user should only see the field to edit the status if the form is in edit mode. */}
                 {parent === "edit" ?
 
                     <div className="d-flex justify-content-center mb-3">
@@ -80,7 +80,7 @@ const TaskForm = props => {
                     </div>
 
                     : ""}
-                {success ? <p className="text-success text-center">**Task saved successfully.**</p> : ""}
+                {/* Change what text displays on the button depending on which mode the form is in. */}
                 <div className="d-flex justify-content-center mb-3"><input className="button blue-button" type="submit" value={parent === "edit" ? "Edit Task" : "Create Task"} /></div>
             </form>
         </div>

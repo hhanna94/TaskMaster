@@ -9,33 +9,43 @@ const AllTasksTable = props => {
     const [tableTaskData, setTableTaskData] = useState([])
     const { filteredTasks, toggleReload, setToggleReload } = props
 
+    // States used for pagination and sorting.
     const [currentPage, setCurrentPage] = useState(1)
     const [tasksPerPage, setTasksPerPage] = useState(5)
     const [sortCriteria, setSortCriteria] = useState({column: "priority", direction: true})
 
+    // Options for a user to select how many tasks they want on the page. 
     const tasksPerPageOptions = [5, 10, 25, 50]
 
+    // Function to sort the list, triggered by clicking on the arrow icons in the table.
     const sortList = () => {
         let column = sortCriteria.column;
         let direction = sortCriteria.direction;
         let priorityImg = document.getElementById("priorityImg")
         let statusImg = document.getElementById("statusImg")
 
+        // If the column clicked on is the status icon, then the priority icon should just be an up and down arrow to indicate that the user is not sorting by the priority column, and vice versa.
         column === "status" ? priorityImg.src = UpDown : statusImg.src = UpDown
+
+        // If the direction is false, then sort the tasks by status or priority (depending on which is clicked) in descending order, and change the image to reflect that it is in descending order.
         if (!direction) {
             column === "status" ? statusImg.src = ZA : priorityImg.src = ZA
             return [...filteredTasks].sort( (a,b) => a[column] < b[column] ? 1 : -1)
-        } else {
+        } 
+        // If the direction is true, then sort the tasks by status or priority (depending on which is clicked) in ascending order, and change the image to reflect that it is in ascending order.
+        else {
             column === "status" ? statusImg.src = AZ : priorityImg.src = AZ
             return [...filteredTasks].sort( (a,b) => a[column] > b[column] ? 1 : -1)
         }
     }
 
+    // Function that returns how many pages there will be based on how many tasks are in the filteredTask list divided by the tasksPerPage that has been selected.
     function numPages() {
         let pages = Math.ceil(filteredTasks.length / tasksPerPage)
         return pages > 0 ? pages : 1;
     }
 
+    // Function used when selecting the previous page button. Checks to make sure that the user isn't on the first page, since there is no previous page if the user is on the first page. It will set the new page to be the previous page, then use the changePage function to change what tasks are displayed.
     const prevPage = () => {
         if (currentPage > 1) {
             let newPage = currentPage - 1
@@ -43,6 +53,7 @@ const AllTasksTable = props => {
         }
     }
 
+    // Function used when selecting the next page button. Checks to make sure that the user isn't on the last page, since there is no next page if the user is on the last page. It will set the new page to be the next page, then use the changePage function to change what tasks are displayed.
     const nextPage = () => {
         if (currentPage < numPages()) {
             let newPage = currentPage + 1
@@ -50,16 +61,18 @@ const AllTasksTable = props => {
         }
     }
 
+    // This is used on loading of the table component to change the page to whatever the currentPage is, which is page 1 by default. This refreshes if you change the tasksPerPage, change the sort, or change any of the filters on the parent view.
     useEffect(() => {
-        console.log("running")
         changePage(currentPage)
     }, [tasksPerPage, toggleReload, sortCriteria])
 
+    // Function used to change which tasks are displayed based on the page.
     const changePage = (page) => {
         var _next = document.getElementById("_next");
         var _prev = document.getElementById("_prev");
         var page_span = document.getElementById("page")
 
+        // If the user manages to get to a page that doesn't exist (either too high or too low), then set the page to either the first page or the last page.
         if (page < 1) {
             page = 1;
         }
@@ -67,24 +80,29 @@ const AllTasksTable = props => {
             page = numPages();
         }
 
+        // Logic to set where the display should start and end based on how many tasks should be displayed per page, then sets the state to display those tasks. This starts off sorted using the default sort state.
         let tableStart = (page - 1) * tasksPerPage
         let tableEnd = tableStart + tasksPerPage
         let tableData = sortList().slice(tableStart, tableEnd)
         setTableTaskData(tableData)
 
+        // Changes the text for what page # the user is on.
         page_span.innerHTML = page;
 
+        // If the user is on the first page, hide the previous style button.
         page === 1 ? _prev.style.visibility = "hidden" : _prev.style.visibility = "visible"
+        // If the user is on the last page, hide the next style button.
         page === numPages() ? _next.style.visibility = "hidden" : _next.style.visibility = "visible"
+
+        // Set the current page state to be the new page.
         setCurrentPage(page);
     }
 
+    // When a user completes a task in the table, then set the task's status as completed, then call on the API to update the task in the database. Then, trigger a reload so that it updates in the table (if it should be visible based on the filter).
     const completeTask = task => {
         let completedTask = {...task, status: "Completed"}
         axios.put(`http://localhost:8000/api/tasks/${task._id}`, completedTask)
-            .then(res => {
-                setToggleReload(!toggleReload)
-            })
+            .then(res => setToggleReload(!toggleReload))
             .catch(err => console.log(err))
     }
 

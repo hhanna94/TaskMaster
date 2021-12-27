@@ -8,6 +8,7 @@ const ViewTask = () => {
     const [task, setTask] = useState({})
     const [loaded, setLoaded] = useState(false)
 
+    // useEffect to get the task data that needs to be passed down to the child component which will only be displayed after the useEffect is successfully run.
     useEffect(() => {
         axios.get(`http://localhost:8000/api/tasks/${id}`)
             .then(res => {

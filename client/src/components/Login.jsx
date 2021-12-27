@@ -8,13 +8,12 @@ const Login = props => {
     const history = useHistory();
     const {toggleUpdate, setToggleUpdate} = props
 
+    // When a user types in the login form, update the form information.
     const handleChange = e => {
-        setLoginInfo({
-            ...loginInfo,
-            [e.target.name]: e.target.value
-        })
+        setLoginInfo({...loginInfo, [e.target.name]: e.target.value})
     }
 
+    // When a user tries to login, call on the API to validate their credentials. If the credentials the user typed in match what is in the database, then force an update of the useEffect on the App.js to pull in the logged in user's information, then redirect them to the home page.
     const login = (e) => {
         e.preventDefault();
         axios.post("http://localhost:8000/api/login", loginInfo, { withCredentials: true })
@@ -32,6 +31,7 @@ const Login = props => {
     return (
         <div className="container w-50">
             <h3>Login</h3>
+            {/* Display an error message if the user typed invalid credentials. */}
             {error.invalidAttempt ? <p className="text-danger text-center">{error.invalidAttempt}</p> : ""}
             <form onSubmit={login} className="mt-4 container w-25">
                 <div className="d-flex justify-content-center mb-3">

@@ -14,6 +14,7 @@ const Admin = props => {
     const [mode, setMode] = useState("create")
     const [sort, setSort] = useState(true)
 
+    // Logic to allow the user to sort employees by department.
     const sortList = () => {
         let departmentImg = document.getElementById("departmentImg")
         if (sort) {
@@ -25,19 +26,19 @@ const Admin = props => {
         }
     }
 
+    // Updates the user form state when a user makes changes to the form.
     const updateUserForm = (e) => {
         let value
+        // Checks whether the input type is a checkbox. If it is, it needs to be set to be the boolean opposite of what it was. All other inputs are handled the same.
         if (e.target.type === "checkbox") {
             value = !userFormInfo.admin;
         } else {
             value = e.target.value;
         }
-        setUserFormInfo({
-            ...userFormInfo,
-            [e.target.name]: value
-        })
+        setUserFormInfo({...userFormInfo, [e.target.name]: value})
     }
 
+    // Gets a list of user emails if the mode is edit. This is used to add a front-end validation for if the email has already been used.
     const getUserEmails = () => {
         if (mode === "create") {
             let emails = {}
@@ -49,14 +50,17 @@ const Admin = props => {
     }
     let userEmails = getUserEmails();
 
+    // Switches the forms mode to edit mode if the user clicks edit in the table, with default form information of the user they want to edit.
     const switchToEditMode = user => {
         setMode("edit")
         setUserFormInfo(user)
+        setErrors({})
     }
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        // If the user is in create mode, call on the API to create a user. If it passes the back-end validations, but returns that the user already exists, set the error to be displayed. If it passes all other back-end validations, reset everything so the form is clear and the users table gets updated.
         if (mode === "create") {
             axios.post('http://localhost:8000/api/users', userFormInfo)
                 .then(res => {
@@ -69,38 +73,37 @@ const Admin = props => {
                         setToggleReload(!toggleReload)
                     }
                 })
-                .catch(err => {
-                    setErrors(err.response.data.errors)
-                })
-        } else {
-            axios.put(`http://localhost:8000/api/users/${userFormInfo._id}`, userFormInfo)
-                .then(res => {
-                    if (res.data.userExists) {
-                        setErrors(res.data)
-                    } else {
-                        setErrors({})
-                        setUserFormInfo(defaultUserInfo)
-                        setToggleReload(!toggleReload)
-                        setMode("create")
-                    }
-                })
+                // If the API call does not pass back-end validations, set the error state so that the user knows what they did wrong.
                 .catch(err => {
                     setErrors(err.response.data.errors)
                 })
         }
-        // Reload App, not just Admin page.
+        // If the user is in edit mode, call on the API to edit the user. If it passes all back-end validations, reset everything so the form is back to create mode and is clear, and the users table gets updated.
+        else {
+            axios.put(`http://localhost:8000/api/users/${userFormInfo._id}`, userFormInfo)
+                .then(res => {
+                    setErrors({})
+                    setUserFormInfo(defaultUserInfo)
+                    setToggleReload(!toggleReload)
+                    setMode("create")
+                })
+                // If the API call does not pass back-end validations, set the error state so that the user knows what they did wrong.
+                .catch(err => {
+                    setErrors(err.response.data.errors)
+                })
+        }
+        // Reload App, not just Admin page since there has been a change to users that needs to be reflected in other parts of the app.
         setToggleUpdate(!toggleUpdate)
     }
 
+    // Delete the user when an admin clicks the delete button.
     const deleteUser = id => {
         axios.delete(`http://localhost:8000/api/users/${id}`)
-            .then(res => {
-                console.log(res)
-                setToggleReload(!toggleReload)
-            })
+            .then(res => setToggleReload(!toggleReload))
             .catch(err => console.log(err))
     }
 
+    // Upon loading the page (and forcing the trigger through updating toggleReload), get a list of all users.
     useEffect(() => {
         axios.get('http://localhost:8000/api/users')
             .then(res => {
@@ -179,6 +182,7 @@ const Admin = props => {
                             <label htmlFor="confirmPassword" className="col-5 col-form-label">Confirm Password: </label>
                             <input onChange={updateUserForm} type="password" name="confirmPassword" id="confirmPassword" className="form-control" value={userFormInfo.confirmPassword} />
                         </div> : ""}
+                        {/* Front end validation to make sure the password and confirm password fields match. */}
                         {mode === "create" && userFormInfo.password !== userFormInfo.confirmPassword && userFormInfo.confirmPassword.length > 0 ? <p className="text-danger">*Passwords must match.</p> : ""}
                         <div className="formDiv justify-content-between">
                             <div>
