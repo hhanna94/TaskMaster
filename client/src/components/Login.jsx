@@ -44,6 +44,10 @@ const Login = props => {
                 </div>
                 <div className="d-flex justify-content-center"><input className="button blue-button" type="submit" value="Login" /></div>
             </form>
+            <div className="mt-5">
+                <p>Thank you so much for taking the time to view my project! This web app does require you to log in to proceed.</p>
+                <p>For admin, use email heather@hanna.com with password Password123!. For a regular user, use rosie@hanna.com with password Password123!.</p>
+            </div>
         </div>
     );
 };
