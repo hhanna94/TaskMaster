@@ -38,7 +38,7 @@ const Admin = props => {
         setUserFormInfo({...userFormInfo, [e.target.name]: value})
     }
 
-    // Gets a list of user emails if the mode is edit. This is used to add a front-end validation for if the email has already been used.
+    // Gets a list of user emails if the mode is create. This is used to add a front-end validation for if the email has already been used.
     const getUserEmails = () => {
         if (mode === "create") {
             let emails = {}

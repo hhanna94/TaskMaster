@@ -9,6 +9,7 @@ import axios from 'axios'
 import CreateTask from './views/CreateTask';
 import EditTask from './views/EditTask';
 import ViewTask from './views/ViewTask';
+import Register from './views/Register';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState({})
@@ -69,6 +70,11 @@ return (
             {/* Requires a user to be an admin to navigate to this page. */}
             <Route path="/admin">
               {loggedInUser.admin ? <Admin departments={departments} toggleUpdate={toggleUpdate} setToggleUpdate={setToggleUpdate} /> : <h4 className="text-center">Must be an admin to access this page.</h4>}
+            </Route>
+
+            {/* Route created for deployment to create a user. */}
+            <Route path="/secretlyRegister">
+              <Register departments={departments} toggleUpdate={toggleUpdate} setToggleUpdate={setToggleUpdate}/>
             </Route>
 
           </Switch>

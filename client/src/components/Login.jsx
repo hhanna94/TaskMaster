@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 
 const Login = props => {
     const [loginInfo, setLoginInfo] = useState({ email: "", password: "" })
@@ -45,8 +45,8 @@ const Login = props => {
                 <div className="d-flex justify-content-center"><input className="button blue-button" type="submit" value="Login" /></div>
             </form>
             <div className="mt-5">
-                <p>Thank you so much for taking the time to view my project! This web app does require you to log in to proceed.</p>
-                <p>For admin, use email heather@hanna.com with password Password123!. For a regular user, use rosie@hanna.com with password Password123!.</p>
+                <p>Thank you so much for taking the time to view my project! This web app does require you to log in to proceed. To get to the "secret" register page, click <Link to="/secretlyRegister">here</Link>!</p>
+                <p>There are admin features, so to see the differences feel free to make both a normal user and an admin account.</p>
             </div>
         </div>
     );
